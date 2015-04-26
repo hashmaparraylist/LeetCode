@@ -3,48 +3,17 @@
  * @return {number}
  */
 var lengthOfLongestSubstring = function(s) {
-  var spliteString = [];
-  var tmpString = [];
-  var i = 0;
-  while(i < s.length) {
-    var c = s.substr(i, 1);
-    tmpString.push({
-       str : c,
-       len : 1,
-    });
-    var len = tmpString.length - 2;
-   
-    for(var j = len; j >= 0; j--) {
-      if (tmpString[j].str.indexOf(c) === -1 ) {
-          var tmp = tmpString[j].str + c;
-          tmpString[j].str = tmp;
-          tmpString[j].len = tmp.length;
-      } else {
-        if (spliteString.length > 0) {
-          spliteString[0] = (spliteString[0].len > tmpString[0].len) ? spliteString[0] : tmpString[0];
-        } else {
-          spliteString[0] = tmpString[0];
-        }
-        tmpString.splice(0, j + 1);
-        break;
-      }
-    }
-   
-    i++;
-  }
-
-  //tmpString.forEach(function(element) {
-  if(tmpString.length > 0) {
-    if (spliteString.length > 0) {
-      spliteString[0] = (spliteString[0].len > tmpString[0].len) ? spliteString[0] : tmpString[0];
+  var used = {};
+  var maxlength, strat;
+  maxlength = start = 0;
+  for(var i = 0; i < s.length; i++) {
+    if(used[s.charAt(i)] !== undefined && start <= used[s.charAt(i)]) {
+      start = used[s.charAt(i)] + 1;
     } else {
-      spliteString[0] = tmpString[0];
+      maxlength = maxlength > (i - start + 1) ? maxlength :  (i - start + 1);
     }
+    used[s.charAt(i)] = i;
   }
-  //});
-
-  if (spliteString.length === 0) {
-    return 0;
-  }
-  return spliteString[0].len;
+  return maxlength;
 };
+
